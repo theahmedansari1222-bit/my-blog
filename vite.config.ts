@@ -2,25 +2,31 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { resolve } from "path";
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [react(), tailwindcss()],
-  base: mode === "development" ? "/" : "/my-blog/", // ✅ 로컬은 "/", GitHub Pages는 "/my-blog/"
+  
+  // Local Development runs on "/" and Production (GitHub Pages) runs on "/my-blog/"
+  base: mode === "development" ? "/" : "/my-blog/", 
+
   esbuild: {
-    legalComments: "none", // 불필요한 주석 제거
+    legalComments: "none", // Removes unnecessary legal comments
   },
+
   build: {
-    minify: "esbuild", // vite v5 이상부터 esbuild로 변경
+    minify: "esbuild", // Optimized build using esbuild for Vite v5+
     terserOptions: {
       compress: {
-        drop_console: true, // 콘솔 로그 제거
-        drop_debugger: true,
+        drop_console: true, // Automatically removes console.log in production
+        drop_debugger: true, // Automatically removes debugger statements
       },
     },
   },
+
   resolve: {
     alias: {
-      "@": resolve(__dirname, "src"),
+      "@": resolve(__dirname, "src"), // Sets up '@/' alias for cleaner imports from 'src' folder
     },
   },
 }));
